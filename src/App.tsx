@@ -1,7 +1,12 @@
 import "./App.css";
+import Calculator from "pages/Calculator";
 
 function App() {
-  return <div>initialize with typescript</div>;
+  return (
+    <>
+      <Calculator />
+    </>
+  );
 }
 
 export default App;
