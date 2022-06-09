@@ -10,10 +10,41 @@ const CalculatorContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
 `;
-const CalculatorButton = styled.button`
-  background-color: ivory;
-  color: blue;
+
+interface ButtonProps {
+  el: string | number | null;
+}
+const CalculatorButton = styled.button<ButtonProps>`
+  /* background-color: #ebdfee; */
+  background-color: ${(props) => {
+    if (props.el === "C") {
+      return "#FA848D";
+    }
+    if (props.el === "=") {
+      return "#84A4FA";
+    } else {
+      return "#ebdfee";
+    }
+  }};
+  border: none;
+  border-radius: 20px;
+  margin: 2px;
+  color: #646c6f;
   font-weight: bold;
+  cursor: pointer;
+
+  :hover {
+    background-color: ${(props) => {
+      if (props.el === "C") {
+        return "#F72F3E";
+      }
+      if (props.el === "=") {
+        return "#1768FF";
+      } else {
+        return "#FFFFFF";
+      }
+    }};
+  }
 `;
 
 const calculatorArr = [
@@ -79,8 +110,13 @@ const CalculatorButtons = ({ screen, setScreen }: Props) => {
     <div>
       <CalculatorContainer>
         {calculatorArr.map((el, index) => {
+          console.log(el, typeof el);
           return (
-            <CalculatorButton onClick={clickButton} key={index}>
+            <CalculatorButton
+              onClick={clickButton}
+              key={index}
+              el={typeof el === "string" ? el : null}
+            >
               {el}
             </CalculatorButton>
           );
