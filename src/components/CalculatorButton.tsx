@@ -103,14 +103,12 @@ const CalculatorButtons = ({ screen, setScreen }: Props) => {
     } else {
       setScreen(screen + e.target.innerText);
     }
-    console.log(screen);
   };
 
   return (
     <div>
       <CalculatorContainer>
         {calculatorArr.map((el, index) => {
-          console.log(el, typeof el);
           return (
             <CalculatorButton
               onClick={clickButton}
