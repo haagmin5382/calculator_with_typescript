@@ -31,6 +31,7 @@ const CalculatorButton = styled.button<ButtonProps>`
   margin: 2px;
   color: #646c6f;
   font-weight: bold;
+  font-size: 2vw;
   cursor: pointer;
 
   :hover {
@@ -51,20 +52,20 @@ const calculatorArr = [
   "C",
   "=",
   <RiDeleteBack2Fill color="red" />,
-  "X",
-  7,
-  8,
-  9,
-  "÷",
-  4,
-  5,
-  6,
+  "*",
+  "7",
+  "8",
+  "9",
+  "/",
+  "4",
+  "5",
+  "6",
   "+",
-  1,
-  2,
-  3,
+  "1",
+  "2",
+  "3",
   "-",
-  0,
+  "0",
   ".",
 ];
 
@@ -80,18 +81,14 @@ const CalculatorButtons = ({ screen, setScreen }: Props) => {
   const clickButton = (e: any) => {
     // console.log(e.target.innerText);
     if (isNaN(Number(e.target.innerText))) {
-      console.log("hello");
+      // 숫자가 아닌 기호를 클릭
       if (e.target.innerText === "C") {
         setScreen("");
       } else if (e.target.innerText === undefined) {
-        setScreen(screen?.slice(0, -1));
-      } else if (e.target.innerText === "X") {
-        setScreen(screen + "*");
-      } else if (e.target.innerText === "÷") {
-        setScreen(screen + "/");
+        setScreen(screen?.slice(0, -1)); // 지우기 클릭
       } else if (e.target.innerText === "=") {
+        // 결과 값
         let sum = new Function(`return ${screen}`);
-
         setScreen(sum().toString());
       } else {
         if (screen) {
@@ -107,6 +104,44 @@ const CalculatorButtons = ({ screen, setScreen }: Props) => {
       setScreen(screen?.slice(0, -1));
     } else {
       setScreen(screen + e.target.innerText);
+    }
+  };
+
+  window.onkeydown = (e: any) => {
+    // console.log(calculatorArr.includes(e.key));
+    if (calculatorArr.includes(e.key)) {
+      if (isNaN(Number(e.key))) {
+        if (e.key === "C") {
+          setScreen("");
+        } else if (e.key === "=") {
+          let sum = new Function(`return ${screen}`);
+          setScreen(sum().toString());
+        } else {
+          if (screen) {
+            if (isNaN(Number(screen[screen.length - 1]))) {
+              setScreen((prevState) => prevState?.slice(0, -1));
+              setScreen((prevState) => prevState + e.key);
+            } else {
+              setScreen(screen + e.key);
+            }
+          }
+        }
+      } else if (e.key?.length === 0) {
+        setScreen(screen?.slice(0, -1));
+      } else {
+        setScreen(screen + e.key);
+      }
+    }
+
+    if (e.key === "Enter") {
+      let sum = new Function(`return ${screen}`);
+      setScreen(sum().toString());
+    }
+    if (e.key === "Escape") {
+      setScreen("");
+    }
+    if (e.key === "Backspace") {
+      setScreen(screen?.slice(0, -1));
     }
   };
 
