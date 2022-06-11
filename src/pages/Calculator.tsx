@@ -19,6 +19,7 @@ const ScreenContainer = styled.div`
   text-align: center;
   width: 30vw;
   height: 20vh;
+  font-size: 2vw;
 `;
 
 function Calculator() {

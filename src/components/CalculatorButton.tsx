@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { RiDeleteBack2Fill } from "react-icons/ri";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 const CalculatorContainer = styled.div`
   padding-top: 30vh;
@@ -13,10 +13,14 @@ const CalculatorContainer = styled.div`
 
 interface ButtonProps {
   el: string | number | null;
+  isPressed: boolean;
 }
 const CalculatorButton = styled.button<ButtonProps>`
   /* background-color: #ebdfee; */
   background-color: ${(props) => {
+    if (props.isPressed) {
+      return "#FFFBF0";
+    }
     if (props.el === "C") {
       return "#FA848D";
     }
@@ -26,6 +30,7 @@ const CalculatorButton = styled.button<ButtonProps>`
       return "#ebdfee";
     }
   }};
+  box-shadow: 1px 2px;
   border: none;
   border-radius: 20px;
   margin: 2px;
@@ -42,7 +47,7 @@ const CalculatorButton = styled.button<ButtonProps>`
       if (props.el === "=") {
         return "#1768FF";
       } else {
-        return "#FFFFFF";
+        return "#F8F0FF";
       }
     }};
   }
@@ -88,8 +93,10 @@ const CalculatorButtons = ({ screen, setScreen }: Props) => {
         setScreen(screen?.slice(0, -1)); // 지우기 클릭
       } else if (e.target.innerText === "=") {
         // 결과 값
-        let sum = new Function(`return ${screen}`);
-        setScreen(sum().toString());
+        if (screen?.length !== 0) {
+          let sum = new Function(`return ${screen}`);
+          setScreen(sum().toString());
+        }
       } else {
         if (screen) {
           if (isNaN(Number(screen[screen.length - 1]))) {
@@ -109,13 +116,16 @@ const CalculatorButtons = ({ screen, setScreen }: Props) => {
 
   window.onkeydown = (e: any) => {
     // console.log(calculatorArr.includes(e.key));
+    setPressedKey(e.key);
     if (calculatorArr.includes(e.key)) {
       if (isNaN(Number(e.key))) {
         if (e.key === "C") {
           setScreen("");
         } else if (e.key === "=") {
-          let sum = new Function(`return ${screen}`);
-          setScreen(sum().toString());
+          if (screen?.length !== 0) {
+            let sum = new Function(`return ${screen}`);
+            setScreen(sum().toString());
+          }
         } else {
           if (screen) {
             if (isNaN(Number(screen[screen.length - 1]))) {
@@ -134,8 +144,10 @@ const CalculatorButtons = ({ screen, setScreen }: Props) => {
     }
 
     if (e.key === "Enter") {
-      let sum = new Function(`return ${screen}`);
-      setScreen(sum().toString());
+      if (screen?.length !== 0) {
+        let sum = new Function(`return ${screen}`);
+        setScreen(sum().toString());
+      }
     }
     if (e.key === "Escape") {
       setScreen("");
@@ -144,7 +156,7 @@ const CalculatorButtons = ({ screen, setScreen }: Props) => {
       setScreen(screen?.slice(0, -1));
     }
   };
-
+  const [pressedKey, setPressedKey] = useState("");
   return (
     <div>
       <CalculatorContainer>
@@ -154,6 +166,7 @@ const CalculatorButtons = ({ screen, setScreen }: Props) => {
               onClick={clickButton}
               key={index}
               el={typeof el === "string" ? el : null}
+              isPressed={pressedKey === el ? true : false}
             >
               {el}
             </CalculatorButton>
