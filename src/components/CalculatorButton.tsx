@@ -51,11 +51,11 @@ const calculatorArr = [
   "C",
   "=",
   <RiDeleteBack2Fill color="red" />,
-  "*",
+  "X",
   7,
   8,
   9,
-  "/",
+  "÷",
   4,
   5,
   6,
@@ -80,10 +80,15 @@ const CalculatorButtons = ({ screen, setScreen }: Props) => {
   const clickButton = (e: any) => {
     // console.log(e.target.innerText);
     if (isNaN(Number(e.target.innerText))) {
+      console.log("hello");
       if (e.target.innerText === "C") {
         setScreen("");
       } else if (e.target.innerText === undefined) {
         setScreen(screen?.slice(0, -1));
+      } else if (e.target.innerText === "X") {
+        setScreen(screen + "*");
+      } else if (e.target.innerText === "÷") {
+        setScreen(screen + "/");
       } else if (e.target.innerText === "=") {
         let sum = new Function(`return ${screen}`);
 
