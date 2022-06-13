@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { RiDeleteBack2Fill } from "react-icons/ri";
-import { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 
 const CalculatorContainer = styled.div`
   padding-top: 30vh;
@@ -83,15 +83,16 @@ interface Props {
 
 const CalculatorButtons = ({ screen, setScreen }: Props) => {
   // screen에 숫자가나오는 함수
-  const clickButton = (e: any) => {
-    // console.log(e.target.innerText);
-    if (isNaN(Number(e.target.innerText))) {
+  const clickButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // console.log(eventTarget.innerText);
+    const eventTarget = e.target as HTMLElement;
+    if (isNaN(Number(eventTarget.innerText))) {
       // 숫자가 아닌 기호를 클릭
-      if (e.target.innerText === "C") {
+      if (eventTarget.innerText === "C") {
         setScreen("");
-      } else if (e.target.innerText === undefined) {
+      } else if (eventTarget.innerText === undefined) {
         setScreen(screen?.slice(0, -1)); // 지우기 클릭
-      } else if (e.target.innerText === "=") {
+      } else if (eventTarget.innerText === "=") {
         // 결과 값
         if (screen?.length !== 0) {
           let sum = new Function(`return ${screen}`);
@@ -101,20 +102,20 @@ const CalculatorButtons = ({ screen, setScreen }: Props) => {
         if (screen) {
           if (isNaN(Number(screen[screen.length - 1]))) {
             setScreen((prevState) => prevState?.slice(0, -1));
-            setScreen((prevState) => prevState + e.target.innerText);
+            setScreen((prevState) => prevState + eventTarget.innerText);
           } else {
-            setScreen(screen + e.target.innerText);
+            setScreen(screen + eventTarget.innerText);
           }
         }
       }
-    } else if (e.target.innerText?.length === 0) {
+    } else if (eventTarget.innerText?.length === 0) {
       setScreen(screen?.slice(0, -1));
     } else {
-      setScreen(screen + e.target.innerText);
+      setScreen(screen + eventTarget.innerText);
     }
   };
 
-  window.onkeydown = (e: any) => {
+  window.onkeydown = (e: KeyboardEvent) => {
     // console.log(calculatorArr.includes(e.key));
     setPressedKey(e.key);
     if (calculatorArr.includes(e.key)) {
