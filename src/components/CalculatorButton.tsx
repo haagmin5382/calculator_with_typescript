@@ -77,7 +77,6 @@ const calculatorArr = [
 interface Props {
   screen: string | undefined;
   setScreen: Dispatch<SetStateAction<string | undefined>>;
-
   //   setScreen: any;
 }
 
@@ -150,7 +149,7 @@ const CalculatorButtons = ({ screen, setScreen }: Props) => {
         setScreen(sum().toString());
       }
     }
-    if (e.key === "Escape") {
+    if (e.key === "Escape" || e.key === "c") {
       setScreen("");
     }
     if (e.key === "Backspace") {
@@ -167,7 +166,7 @@ const CalculatorButtons = ({ screen, setScreen }: Props) => {
               onClick={clickButton}
               key={index}
               el={typeof el === "string" ? el : null}
-              isPressed={pressedKey === el ? true : false}
+              isPressed={pressedKey === el}
             >
               {el}
             </CalculatorButton>
