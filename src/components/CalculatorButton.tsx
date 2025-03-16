@@ -1,83 +1,11 @@
-import styled from "styled-components";
-import { RiDeleteBack2Fill } from "react-icons/ri";
+import { calculatorArr } from "constants/calculatorButton";
 import React, { Dispatch, SetStateAction, useState } from "react";
-
-const CalculatorContainer = styled.div`
-  padding-top: 30vh;
-  margin-left: 35vw;
-  width: 30vw;
-  height: 30vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-`;
-
-interface ButtonProps {
-  el: string | number | null;
-  isPressed: boolean;
-}
-const CalculatorButton = styled.button<ButtonProps>`
-  /* background-color: #ebdfee; */
-  background-color: ${(props) => {
-    if (props.isPressed) {
-      return "#FFFBF0";
-    }
-    if (props.el === "C") {
-      return "#FA848D";
-    }
-    if (props.el === "=") {
-      return "#84A4FA";
-    } else {
-      return "#ebdfee";
-    }
-  }};
-  box-shadow: 1px 2px;
-  border: none;
-  border-radius: 20px;
-  margin: 2px;
-  color: #646c6f;
-  font-weight: bold;
-  font-size: 2vw;
-  cursor: pointer;
-
-  :hover {
-    background-color: ${(props) => {
-      if (props.el === "C") {
-        return "#F72F3E";
-      }
-      if (props.el === "=") {
-        return "#1768FF";
-      } else {
-        return "#F8F0FF";
-      }
-    }};
-  }
-`;
-
-const calculatorArr = [
-  "C",
-  "=",
-  <RiDeleteBack2Fill color="red" />,
-  "*",
-  "7",
-  "8",
-  "9",
-  "/",
-  "4",
-  "5",
-  "6",
-  "+",
-  "1",
-  "2",
-  "3",
-  "-",
-  "0",
-  ".",
-];
+import { CalculatorButton, CalculatorContainer } from "styles/calculator.style";
+import { calculateExpression } from "utils/calculator";
 
 interface Props {
   screen: string | undefined;
   setScreen: Dispatch<SetStateAction<string | undefined>>;
-  //   setScreen: any;
 }
 
 const CalculatorButtons = ({ screen, setScreen }: Props) => {
@@ -94,8 +22,8 @@ const CalculatorButtons = ({ screen, setScreen }: Props) => {
       } else if (eventTarget.innerText === "=") {
         // 결과 값
         if (screen?.length !== 0) {
-          let sum = new Function(`return ${screen}`);
-          setScreen(sum().toString());
+          const sum = calculateExpression(screen as string);
+          setScreen(sum.toString());
         }
       } else {
         if (screen) {
@@ -123,8 +51,8 @@ const CalculatorButtons = ({ screen, setScreen }: Props) => {
           setScreen("");
         } else if (e.key === "=") {
           if (screen?.length !== 0) {
-            let sum = new Function(`return ${screen}`);
-            setScreen(sum().toString());
+            const sum = calculateExpression(screen as string);
+            setScreen(sum.toString());
           }
         } else {
           if (screen) {
